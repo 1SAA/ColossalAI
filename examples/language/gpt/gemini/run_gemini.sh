@@ -1,3 +1,16 @@
+# activate conda environment
+source /fsx/software/miniconda3/bin/activate hhc
+
+# set environment vars
+export FI_PROVIDER=efa
+export FI_OFI_RXR_RX_COPY_UNEXP=1
+export FI_OFI_RXR_RX_COPY_OOO=1
+export FI_EFA_MR_CACHE_ENABLE=1
+export FI_OFI_RXR_INLINE_MR_ENABLE=1
+export NCCL_DEBUG=INFO
+
+export HUGGINGFACE_HUB_CACHE=/fsx/users/hhc/hf_cache
+
 set -x
 # distplan in ["CAI_ZeRO1", "CAI_ZeRO2", "CAI_Gemini", "Pytorch_DDP", "Pytorch_ZeRO"]
 export DISTPLAN=${DISTPLAN:-"CAI_Gemini"}
@@ -6,10 +19,10 @@ export DISTPLAN=${DISTPLAN:-"CAI_Gemini"}
 export GPUNUM=${GPUNUM:-1}
 export TPDEGREE=${TPDEGREE:-1}
 export PLACEMENT=${PLACEMENT:-"cpu"}
-export USE_SHARD_INIT=${USE_SHARD_INIT:-False}
+export USE_SHARD_INIT=${USE_SHARD_INIT:-True}
 export BATCH_SIZE=${BATCH_SIZE:-16}
 export MODEL_TYPE=${MODEL_TYPE:-"gpt2_medium"}
-export TRAIN_STEP=${TRAIN_STEP:-10}
+export TRAIN_STEP=${TRAIN_STEP:-6}
 # export PYTHONPATH=$PWD:$PYTHONPATH
 
 if [ ${USE_SHARD_INIT} = "True" ]; then
@@ -20,7 +33,9 @@ fi
 
 mkdir -p gemini_logs
 
-torchrun --standalone --nproc_per_node=${GPUNUM} ./train_gpt_demo.py \
+colossalai run --nproc_per_node=${GPUNUM} \
+--host=192.168.2.85 \
+--master_addr=192.168.2.85 ./train_gpt_demo.py \
 --tp_degree=${TPDEGREE} \
 --model_type=${MODEL_TYPE} \
 --batch_size=${BATCH_SIZE} \
