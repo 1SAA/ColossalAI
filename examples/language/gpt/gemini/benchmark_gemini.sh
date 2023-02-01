@@ -6,7 +6,7 @@ for MODEL_TYPE in "gpt2_20b" "gpt2_30b" "gpt2_40b"; do
           if [ ${TPDEGREE} -gt ${GPUNUM} ]; then
             continue
           fi
-          for PLACEMENT in "cpu" "auto"; do
+          for PLACEMENT in "cpu"; do
             echo "****************** Begin ***************************"
             echo "+ benchmrking MODEL ${MODEL_TYPE} DISTPLAN ${DISTPLAN} GPU ${GPUNUM} BS ${BATCH_SIZE} TP ${TPDEGREE} POLICY ${PLACEMENT}"
             MODEL_TYPE=${MODEL_TYPE} DISTPLAN=${DISTPLAN} BATCH_SIZE=${BATCH_SIZE} GPUNUM=${GPUNUM} TPDEGREE=${TPDEGREE} PLACEMENT=${PLACEMENT} \
