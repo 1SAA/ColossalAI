@@ -264,7 +264,7 @@ def main():
 
         # wrap your model and optimizer
         model = zero_model_wrapper(model, zero_stage, gemini_config)
-        optimizer = zero_optim_wrapper(model, optimizer, optim_config=optim_config)
+        optimizer = zero_optim_wrapper(model, optimizer, initial_scale=32, optim_config=optim_config)
 
         logger.info(get_mem_info(prefix='After init optim, '), ranks=[0])
     elif args.distplan.startswith("Pytorch"):
