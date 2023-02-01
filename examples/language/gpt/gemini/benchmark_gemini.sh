@@ -1,8 +1,8 @@
-for MODEL_TYPE in "gpt2_10b" "gpt2_20b" "gpt2_30b" "gpt2_40b"; do
+for MODEL_TYPE in "gpt2_20b" "gpt2_30b" "gpt2_40b"; do
   for DISTPLAN in "CAI_Gemini"; do
-    for BATCH_SIZE in 8 16 32; do
-      for GPUNUM in 4 8; do
-        for TPDEGREE in 1 2; do
+    for BATCH_SIZE in 16 24 32; do
+      for GPUNUM in 16; do
+        for TPDEGREE in 1; do
           if [ ${TPDEGREE} -gt ${GPUNUM} ]; then
             continue
           fi

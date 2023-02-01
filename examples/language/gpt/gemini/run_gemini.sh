@@ -16,7 +16,7 @@ set -x
 export DISTPLAN=${DISTPLAN:-"CAI_Gemini"}
 
 # The following options only valid when DISTPLAN="colossalai"
-export GPUNUM=${GPUNUM:-1}
+export GPUNUM=${GPUNUM:-16}
 export TPDEGREE=${TPDEGREE:-1}
 export PLACEMENT=${PLACEMENT:-"cpu"}
 export USE_SHARD_INIT=${USE_SHARD_INIT:-True}
@@ -33,9 +33,9 @@ fi
 
 mkdir -p gemini_logs
 
-colossalai run --nproc_per_node=${GPUNUM} \
---host=192.168.2.85 \
---master_addr=192.168.2.85 ./train_gpt_demo.py \
+colossalai run --nproc_per_node=8 \
+--host=192.168.2.65,192.168.2.53 \
+--master_addr=192.168.2.65 ./train_gpt_demo.py \
 --tp_degree=${TPDEGREE} \
 --model_type=${MODEL_TYPE} \
 --batch_size=${BATCH_SIZE} \
